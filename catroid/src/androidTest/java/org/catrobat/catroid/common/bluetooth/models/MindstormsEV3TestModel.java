@@ -373,6 +373,9 @@ public class MindstormsEV3TestModel implements DeviceModel {
 			case NXT_ULTRASONIC:
 				setSensorValue(port, sensorValueRandom.nextInt(255));
 				break;
+			case NXT_SOUND:
+				setSensorValue(port, sensorValueRandom.nextInt(100));
+				break;
 			default:
 				setSensorValue(port, 255);
 				break;

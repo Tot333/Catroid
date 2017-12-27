@@ -173,6 +173,10 @@ public class LegoSensorPortConfigDialog extends DialogFragment {
 					title = getString(R.string.ev3_sensor_nxt_ultrasonic);
 					ev3Sensor = EV3Sensor.Sensor.NXT_ULTRASONIC;
 					break;
+				case R.string.formula_editor_sensor_lego_ev3_sensor_nxt_sound:
+					title = getString(R.string.ev3_sensor_nxt_sound);
+					ev3Sensor = EV3Sensor.Sensor.NXT_SOUND;
+					break;
 				default:
 					title = getString(R.string.nxt_sensor_not_found);
 					ev3Sensor = EV3Sensor.Sensor.NO_SENSOR;
