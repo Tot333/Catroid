@@ -64,6 +64,7 @@ import static org.catrobat.catroid.common.Constants.LANGUAGE_TAG_KEY;
 
 public class SettingsActivity extends PreferenceActivity {
 
+	public static final String SETTINGS_SHOW_EMBROIDERY_BRICKS = "setting_embroidery_bricks";
 	public static final String SETTINGS_MINDSTORMS_NXT_BRICKS_ENABLED = "settings_mindstorms_nxt_bricks_enabled";
 	public static final String SETTINGS_MINDSTORMS_NXT_SHOW_SENSOR_INFO_BOX_DISABLED = "settings_mindstorms_nxt_show_sensor_info_box_disabled";
 	public static final String SETTINGS_MINDSTORMS_EV3_BRICKS_ENABLED = "settings_mindstorms_ev3_bricks_enabled";
@@ -132,6 +133,13 @@ public class SettingsActivity extends PreferenceActivity {
 		setLanguage();
 
 		screen = getPreferenceScreen();
+
+		if (!BuildConfig.FEATURE_EMBROIDERY_ENABLED) {
+			CheckBoxPreference embroideryPreference = (CheckBoxPreference) findPreference
+					(SETTINGS_SHOW_EMBROIDERY_BRICKS);
+			embroideryPreference.setEnabled(false);
+			screen.removePreference(embroideryPreference);
+		}
 
 		if (!BuildConfig.FEATURE_LEGO_NXT_ENABLED) {
 			PreferenceScreen legoNxtPreference = (PreferenceScreen) findPreference(NXT_SETTINGS_SCREEN);
@@ -410,6 +418,10 @@ public class SettingsActivity extends PreferenceActivity {
 				context);
 	}
 
+	public static boolean isEmroiderySharedPreferenceEnabled(Context context) {
+		return getBooleanSharedPreference(false, SETTINGS_SHOW_EMBROIDERY_BRICKS, context);
+	}
+
 	public static boolean isDroneSharedPreferenceEnabled(Context context) {
 		return getBooleanSharedPreference(false, SETTINGS_SHOW_PARROT_AR_DRONE_BRICKS, context);
 	}
@@ -458,6 +470,13 @@ public class SettingsActivity extends PreferenceActivity {
 	public static void setArduinoSharedPreferenceEnabled(Context context, boolean value) {
 		SharedPreferences.Editor editor = getSharedPreferences(context).edit();
 		editor.putBoolean(SETTINGS_SHOW_ARDUINO_BRICKS, value);
+		editor.commit();
+	}
+
+	// TODO call like arduino (projectManager ~140)
+	public static void setEmbroiderySharedPreferenceEnabled(Context context, boolean value) {
+		SharedPreferences.Editor editor = getSharedPreferences(context).edit();
+		editor.putBoolean(SETTINGS_SHOW_EMBROIDERY_BRICKS, value);
 		editor.commit();
 	}
 

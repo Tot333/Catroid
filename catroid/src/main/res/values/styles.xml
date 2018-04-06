@@ -461,6 +461,11 @@
         <item name="android:background">@drawable/brick_selection_background_drone</item>
     </style>
 
+    // TODO: change to new drawable for embroidery
+    <style name="BrickCategory.Embroidery">
+        <item name="android:background">@drawable/brick_selection_background_lego</item>
+    </style>
+
     <style name="BrickCategory.Lego">
         <item name="android:background">@drawable/brick_selection_background_lego</item>
     </style>

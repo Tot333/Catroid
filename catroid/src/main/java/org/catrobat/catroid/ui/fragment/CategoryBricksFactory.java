@@ -236,6 +236,8 @@ public class CategoryBricksFactory {
 			tempList = setupChromecastCategoryList(context);
 		} else if (category.equals(context.getString(R.string.category_raspi))) {
 			tempList = setupRaspiCategoryList();
+		} else if (category.equals(context.getString(R.string.category_embroidery))) {
+			tempList = setupEmbroideryCategoryList();
 		}
 
 		for (Brick brick : tempList) {
@@ -577,6 +579,13 @@ public class CategoryBricksFactory {
 				.RASPI_PWM_INITIAL_FREQUENCY, BrickValues.RASPI_PWM_INITIAL_PERCENTAGE));
 
 		return raspiBrickList;
+	}
+
+	private List<Brick> setupEmbroideryCategoryList() {
+		List<Brick> embroideryBrickList = new ArrayList<>();
+		embroideryBrickList.add(new PreviousLookBrick());
+
+		return embroideryBrickList;
 	}
 
 	private boolean isBackground(Sprite sprite) {
