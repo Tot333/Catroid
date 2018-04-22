@@ -69,6 +69,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 // Remove checkstyle disable when https://github.com/checkstyle/checkstyle/issues/1349 is fixed
 // CHECKSTYLE DISABLE IndentationCheck FOR 8 LINES
@@ -766,6 +767,7 @@ public class Sprite implements Serializable, Cloneable {
 		public Color penColor = BrickValues.PEN_COLOR;
 		public PointF previousPoint = null;
 		public boolean stamp = false;
+		public ConcurrentLinkedQueue<PointF> pointsToDraw = new ConcurrentLinkedQueue<>();
 	}
 
 	public boolean toBeConverted() {
