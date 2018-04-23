@@ -20,16 +20,13 @@
   ~ You should have received a copy of the GNU Affero General Public License
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/BrickCategory.Embroidery">
-
-    <include layout="@layout/icon_brick_category_embroidery" />
-
-    <TextView
-        style="@style/BrickCategoryText"
-        android:drawableEnd="@drawable/main_menu_button_arrow"
-        android:text="@string/category_embroidery">
-    </TextView>
-
-
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+    //TODO change icon_data zu icon_embroidery
+    <ImageView
+        android:src="?attr/icon_data"
+        style="@style/CategoryIconStyle">
+    </ImageView>
 </LinearLayout>

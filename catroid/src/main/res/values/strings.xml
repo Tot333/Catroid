@@ -922,6 +922,11 @@
     <!--  -->
 
 
+    <!-- Embroidery -->
+    <string name="brick_stitch">Stitch</string>
+    <!--  -->
+
+
     <!-- Control bricks -->
     <string name="brick_when_started">When program starts</string>
     <string name="brick_when">When tapped</string>
