@@ -89,6 +89,7 @@ public class Sprite implements Serializable, Cloneable {
 	public transient Look look = new Look(this);
 	public transient boolean isBackpackObject = false;
 	public transient PenConfiguration penConfiguration = new PenConfiguration();
+	public transient EmbroideryConfiguration embroideryConfiguration = new EmbroideryConfiguration();
 	private transient boolean convertToSingleSprite = false;
 	private transient boolean convertToGroupItemSprite = false;
 	private transient Multimap<EventId, EventSequenceAction> idToEventSequenceMap = HashMultimap.create();
@@ -195,6 +196,7 @@ public class Sprite implements Serializable, Cloneable {
 			lookData.dispose();
 		}
 		penConfiguration = new PenConfiguration();
+		embroideryConfiguration = new EmbroideryConfiguration();
 	}
 
 	public void invalidate() {
@@ -794,6 +796,11 @@ public class Sprite implements Serializable, Cloneable {
 		public Color penColor = BrickValues.PEN_COLOR;
 		public PointF previousPoint = null;
 		public boolean stamp = false;
+	}
+
+	public class EmbroideryConfiguration {
+		public boolean stitch = false;
+		public PointF previousPoint = null;
 	}
 
 	public boolean toBeConverted() {

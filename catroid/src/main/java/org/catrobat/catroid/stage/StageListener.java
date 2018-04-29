@@ -138,6 +138,7 @@ public class StageListener implements ApplicationListener {
 	private Viewport viewPort;
 	public ShapeRenderer shapeRenderer;
 	private PenActor penActor;
+	private EmbroideryActor embroideryActor;
 
 	private List<Sprite> sprites;
 
@@ -224,6 +225,9 @@ public class StageListener implements ApplicationListener {
 		passepartout = new Passepartout(ScreenValues.SCREEN_WIDTH, ScreenValues.SCREEN_HEIGHT, maximizeViewPortWidth,
 				maximizeViewPortHeight, virtualWidth, virtualHeight);
 		stage.addActor(passepartout);
+
+		embroideryActor = new EmbroideryActor();
+		stage.addActor(embroideryActor);
 
 		if (DEBUG) {
 			OrthoCamController camController = new OrthoCamController(camera);
@@ -428,6 +432,9 @@ public class StageListener implements ApplicationListener {
 		if (penActor != null) {
 			penActor.dispose();
 		}
+		if (embroideryActor != null) {
+			embroideryActor.dispose();
+		}
 		finished = true;
 	}
 
@@ -444,6 +451,9 @@ public class StageListener implements ApplicationListener {
 			stage.clear();
 			if (penActor != null) {
 				penActor.dispose();
+			}
+			if (embroideryActor != null) {
+				embroideryActor.dispose();
 			}
 			SoundManager.getInstance().clear();
 
@@ -465,6 +475,8 @@ public class StageListener implements ApplicationListener {
 				}
 			}
 			stage.addActor(passepartout);
+			embroideryActor = new EmbroideryActor();
+			stage.addActor(embroideryActor);
 			initStageInputListener();
 
 			paused = true;
@@ -713,6 +725,7 @@ public class StageListener implements ApplicationListener {
 
 	public void clearBackground() {
 		penActor.reset();
+		embroideryActor.reset();
 	}
 
 	private void initScreenMode() {

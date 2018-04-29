@@ -235,6 +235,23 @@
         <item name="android:background">@drawable/brick_green_3h</item>
     </style>
 
+    <style name="BrickContainer.Embroidery"></style>
+
+    <style name="BrickContainer.Embroidery.Small">
+        <item name="android:minHeight">@dimen/brick_height_small</item>
+        <item name="android:background">@drawable/brick_pink_1h</item>
+    </style>
+
+    <style name="BrickContainer.Embroidery.Medium">
+        <item name="android:minHeight">@dimen/brick_height_medium</item>
+        <item name="android:background">@drawable/brick_pink_2h</item>
+    </style>
+
+    <style name="BrickContainer.Embroidery.Big">
+        <item name="android:minHeight">@dimen/brick_height_big</item>
+        <item name="android:background">@drawable/brick_pink_3h</item>
+    </style>
+
     <style name="BrickContainer.Pen"></style>
 
     <style name="BrickContainer.Pen.Small">
@@ -504,6 +521,10 @@
 
     <style name="BrickCategory.Lego">
         <item name="android:background">@drawable/brick_selection_background_lego</item>
+    </style>
+
+    <style name="BrickCategory.Embroidery">
+        <item name="android:background">@drawable/brick_selection_background_embroidery</item>
     </style>
 
     <style name="BrickCategory.Bluetooth">

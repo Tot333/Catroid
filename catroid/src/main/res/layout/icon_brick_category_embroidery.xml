@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Catroid: An on-device visual programming system for Android devices
-  ~ Copyright (C) 2010-2018 The Catrobat Team
+  ~ Copyright (C) 2010-2017 The Catrobat Team
   ~ (<http://developer.catrobat.org/credits>)
   ~
   ~ This program is free software: you can redistribute it and/or modify
@@ -21,15 +20,13 @@
   ~ You should have received a copy of the GNU Affero General Public License
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/BrickCategory.Cast">
-
-    <include layout="@layout/icon_brick_category_chromecast"/>
-
-    <TextView
-        style="@style/BrickCategoryText"
-        android:drawableEnd="@drawable/main_menu_button_arrow"
-        android:text="@string/category_cast" >
-    </TextView>
-
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+    //TODO change icon_data zu icon_embroidery
+    <ImageView
+        android:src="?attr/icon_data"
+        style="@style/CategoryIconStyle">
+    </ImageView>
 </LinearLayout>
