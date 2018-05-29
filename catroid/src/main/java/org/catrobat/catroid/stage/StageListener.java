@@ -22,10 +22,12 @@
  */
 package org.catrobat.catroid.stage;
 
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.PointF;
 import android.os.SystemClock;
+import android.util.DisplayMetrics;
 import android.util.Log;
 
 import com.badlogic.gdx.ApplicationListener;
@@ -65,8 +67,10 @@ import org.catrobat.catroid.content.Look;
 import org.catrobat.catroid.content.Project;
 import org.catrobat.catroid.content.Scene;
 import org.catrobat.catroid.content.Sprite;
+import org.catrobat.catroid.content.XmlHeader;
 import org.catrobat.catroid.content.eventids.EventId;
 import org.catrobat.catroid.content.eventids.GamepadEventId;
+import org.catrobat.catroid.embroidery.EmbroideryList;
 import org.catrobat.catroid.facedetection.FaceDetectionHandler;
 import org.catrobat.catroid.io.SoundManager;
 import org.catrobat.catroid.physics.PhysicsDebugSettings;
@@ -133,6 +137,9 @@ public class StageListener implements ApplicationListener {
 	private Viewport viewPort;
 	public ShapeRenderer shapeRenderer;
 	private PenActor penActor;
+	private EmbroideryActor embroideryActor;
+	public EmbroideryList embroideryList;
+	private float screenRation;
 
 	private List<Sprite> sprites;
 
@@ -158,6 +165,9 @@ public class StageListener implements ApplicationListener {
 	public int maximizeViewPortWidth = 0;
 
 	public boolean axesOn = false;
+
+	private static final int Z_LAYER_PEN_ACTOR = 1;
+	private static final int Z_LAYER_EMBROIDERY_ACTOR = 2;
 
 	private byte[] thumbnail;
 	private Map<String, StageBackup> stageBackupMap = new HashMap<>();
@@ -205,17 +215,22 @@ public class StageListener implements ApplicationListener {
 		physicsWorld = scene.resetPhysicsWorld();
 
 		sprites = new ArrayList<>(scene.getSpriteList());
-		boolean addPenActor = true;
+
 		for (Sprite sprite : sprites) {
 			sprite.resetSprite();
 			sprite.look.createBrightnessContrastHueShader();
 			stage.addActor(sprite.look);
-			if (addPenActor) {
-				penActor = new PenActor();
-				stage.addActor(penActor);
-				addPenActor = false;
-			}
 		}
+
+		penActor = new PenActor();
+		stage.addActor(penActor);
+		penActor.setZIndex(Z_LAYER_PEN_ACTOR);
+
+		screenRation = calculateScreenRatio();
+		embroideryActor = new EmbroideryActor(screenRation);
+		stage.addActor(embroideryActor);
+		embroideryActor.setZIndex(Z_LAYER_EMBROIDERY_ACTOR);
+
 		passepartout = new Passepartout(ScreenValues.SCREEN_WIDTH, ScreenValues.SCREEN_HEIGHT, maximizeViewPortWidth,
 				maximizeViewPortHeight, virtualWidth, virtualHeight);
 		stage.addActor(passepartout);
@@ -242,6 +257,8 @@ public class StageListener implements ApplicationListener {
 			collisionPolygonDebugRenderer.setColor(Color.MAGENTA);
 		}
 		FaceDetectionHandler.resumeFaceDetection();
+
+		embroideryList = new EmbroideryList();
 	}
 
 	public void cloneSpriteAndAddToStage(Sprite cloneMe) {
@@ -382,6 +399,7 @@ public class StageListener implements ApplicationListener {
 		VibratorUtil.reset();
 		TouchUtil.reset();
 		removeAllClonedSpritesFromStage();
+		embroideryList.clear();
 
 		for (Scene scene : ProjectManager.getInstance().getCurrentProject().getSceneList()) {
 			scene.firstStart = true;
@@ -423,6 +441,8 @@ public class StageListener implements ApplicationListener {
 		if (penActor != null) {
 			penActor.dispose();
 		}
+
+		embroideryList = null;
 		finished = true;
 	}
 
@@ -440,25 +460,31 @@ public class StageListener implements ApplicationListener {
 			if (penActor != null) {
 				penActor.dispose();
 			}
+
+			embroideryList.clear();
+
 			SoundManager.getInstance().clear();
 
 			physicsWorld = scene.resetPhysicsWorld();
 
 			Sprite sprite;
 
-			boolean addPenActor = true;
-
 			for (int i = 0; i < spriteSize; i++) {
 				sprite = sprites.get(i);
 				sprite.resetSprite();
 				sprite.look.createBrightnessContrastHueShader();
 				stage.addActor(sprite.look);
-				if (addPenActor) {
-					penActor = new PenActor();
-					stage.addActor(penActor);
-					addPenActor = false;
-				}
 			}
+
+			penActor = new PenActor();
+			stage.addActor(penActor);
+			penActor.setZIndex(Z_LAYER_PEN_ACTOR);
+
+			screenRation = calculateScreenRatio();
+			embroideryActor = new EmbroideryActor(screenRation);
+			stage.addActor(embroideryActor);
+			embroideryActor.setZIndex(Z_LAYER_EMBROIDERY_ACTOR);
+
 			stage.addActor(passepartout);
 			initStageInputListener();
 
@@ -793,6 +819,7 @@ public class StageListener implements ApplicationListener {
 		public boolean cameraRunning;
 		public Map<Sprite, ShowBubbleActor> bubbleActorMap;
 		public PenActor penActor;
+		public EmbroideryList embroideryList;
 	}
 
 	private StageBackup saveToBackup() {
@@ -821,6 +848,7 @@ public class StageListener implements ApplicationListener {
 		}
 		backup.bubbleActorMap = bubbleActorMap;
 		backup.penActor = penActor;
+		backup.embroideryList = embroideryList;
 		return backup;
 	}
 
@@ -852,6 +880,7 @@ public class StageListener implements ApplicationListener {
 		}
 		bubbleActorMap = backup.bubbleActorMap;
 		penActor = backup.penActor;
+		embroideryList = backup.embroideryList;
 	}
 
 	public void drawDebugCollisionPolygons() {
@@ -903,5 +932,14 @@ public class StageListener implements ApplicationListener {
 			}
 		}
 		collisionPolygonDebugRenderer.end();
+	}
+
+	private float calculateScreenRatio() {
+		DisplayMetrics metrics = Resources.getSystem().getDisplayMetrics();
+		XmlHeader header = ProjectManager.getInstance().getCurrentProject().getXmlHeader();
+		float deviceDiagonalPixel = (float) Math.sqrt(Math.pow(metrics.widthPixels, 2) + Math.pow(metrics.heightPixels, 2));
+		float creatorDiagonalPixel = (float) Math.sqrt(Math.pow(header.getVirtualScreenWidth(), 2)
+				+ Math.pow(header.getVirtualScreenHeight(), 2));
+		return creatorDiagonalPixel / deviceDiagonalPixel;
 	}
 }
