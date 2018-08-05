@@ -807,6 +807,7 @@ public class StageListener implements ApplicationListener {
 		backup.actors = new Array<>(stage.getActors());
 		backup.penActor = penActor;
 		backup.bubbleActorMap = new HashMap<>(bubbleActorMap);
+		backup.embroideryList = embroideryList;
 
 		backup.paused = paused;
 		backup.finished = finished;
@@ -846,6 +847,7 @@ public class StageListener implements ApplicationListener {
 
 		bubbleActorMap.clear();
 		bubbleActorMap.putAll(backup.bubbleActorMap);
+		embroideryList = backup.embroideryList;
 
 		paused = backup.paused;
 		finished = backup.finished;

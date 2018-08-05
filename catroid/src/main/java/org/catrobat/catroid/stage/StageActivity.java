@@ -62,6 +62,7 @@ import org.catrobat.catroid.content.actions.AskAction;
 import org.catrobat.catroid.content.bricks.Brick;
 import org.catrobat.catroid.drone.jumpingsumo.JumpingSumoDeviceController;
 import org.catrobat.catroid.drone.jumpingsumo.JumpingSumoInitializer;
+import org.catrobat.catroid.embroidery.DSTFileGenerator;
 import org.catrobat.catroid.facedetection.FaceDetectionHandler;
 import org.catrobat.catroid.formulaeditor.SensorHandler;
 import org.catrobat.catroid.io.StageAudioFocus;
@@ -256,6 +257,8 @@ public class StageActivity extends AndroidApplication {
 		} else {
 			pause();
 			stageDialog.show();
+			DSTFileGenerator fileGenerator = new DSTFileGenerator();
+			fileGenerator.createDSTFile(stageListener.embroideryList);
 		}
 	}
 
