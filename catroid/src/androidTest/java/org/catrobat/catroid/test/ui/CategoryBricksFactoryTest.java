@@ -123,6 +123,14 @@ public class CategoryBricksFactoryTest {
 	}
 
 	@Test
+	public void testEmbroideryBricks() {
+		final int expectedBackgroundBrickCount = 1;
+		final int expectedSpriteBrickCount = 0;
+		checkBrickCountInCategory(R.string.category_embroidery, background, expectedBackgroundBrickCount);
+		checkBrickCountInCategory(R.string.category_embroidery, sprite, expectedSpriteBrickCount);
+	}
+
+	@Test
 	public void testUnknownCategory() {
 		List<Brick> bricks = factory.getBricks("NON_EXISTING_CATEGORY", sprite, context);
 		assertTrue(bricks.isEmpty());

@@ -207,6 +207,7 @@ public class CategoryBricksFactory {
 		boolean isUserScriptMode = context instanceof UserBrickSpriteActivity;
 		List<Brick> tempList = new LinkedList<>();
 		List<Brick> toReturn = new ArrayList<>();
+		boolean isBackgroundSprite = sprite.getName().equals(context.getString(R.string.background));
 		if (category.equals(context.getString(R.string.category_event))) {
 			tempList = setupEventCategoryList(context);
 		} else if (category.equals(context.getString(R.string.category_control))) {
@@ -216,7 +217,6 @@ public class CategoryBricksFactory {
 		} else if (category.equals(context.getString(R.string.category_sound))) {
 			tempList = setupSoundCategoryList(context);
 		} else if (category.equals(context.getString(R.string.category_looks))) {
-			boolean isBackgroundSprite = sprite.getName().equals(context.getString(R.string.background));
 			tempList = setupLooksCategoryList(context, isBackgroundSprite);
 		} else if (category.equals(context.getString(R.string.category_pen))) {
 			tempList = setupPenCategoryList(sprite);
@@ -241,7 +241,7 @@ public class CategoryBricksFactory {
 		} else if (category.equals(context.getString(R.string.category_raspi))) {
 			tempList = setupRaspiCategoryList();
 		} else if (category.equals(context.getString(R.string.category_embroidery))) {
-			tempList = setupEmbroideryCategoryList();
+			tempList = setupEmbroideryCategoryList(isBackgroundSprite);
 		}
 
 		for (Brick brick : tempList) {
@@ -613,9 +613,12 @@ public class CategoryBricksFactory {
 		return raspiBrickList;
 	}
 
-	private List<Brick> setupEmbroideryCategoryList() {
+	private List<Brick> setupEmbroideryCategoryList(boolean isBackgroundSprite) {
 		List<Brick> embroideryBrickList = new ArrayList<>();
-		embroideryBrickList.add(new StitchBrick());
+
+		if(isBackgroundSprite) {
+			embroideryBrickList.add(new StitchBrick());
+		}
 
 		return embroideryBrickList;
 	}
@@ -731,7 +734,7 @@ public class CategoryBricksFactory {
 				category = res.getString(R.string.category_cast);
 			}
 		}
-		categoryBricks = setupEmbroideryCategoryList();
+		categoryBricks = setupEmbroideryCategoryList(isBackgroundSprite);
 		for (Brick categoryBrick : categoryBricks) {
 			if (brick.getClass().equals(categoryBrick.getClass())) {
 				category = res.getString(R.string.category_embroidery);
